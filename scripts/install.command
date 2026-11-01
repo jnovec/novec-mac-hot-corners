@@ -52,7 +52,7 @@ cat > "$PLIST" <<PLIST_XML
 <plist version="1.0"><dict>
 <key>Label</key><string>$LABEL</string>
 <key>ProgramArguments</key><array>
-<string>/usr/bin/open</string><string>-a</string><string>$DEST_APP</string>
+<string>/usr/bin/open</string><string>-a</string><string>$DEST_APP</string><string>--args</string><string>--background</string>
 </array>
 <key>RunAtLoad</key><true/>
 <key>LimitLoadToSessionType</key><string>Aqua</string>
@@ -60,6 +60,11 @@ cat > "$PLIST" <<PLIST_XML
 PLIST_XML
 
 plutil -lint "$PLIST"
+# Show the new settings GUI on first launch. The login agent uses --background.
+if ! open -a "$DEST_APP"; then
+  echo "macOS blocked the launch. Open System Settings > Privacy & Security, use Open Anyway, then open NOVEC Hot Corners again." >&2
+  exit 2
+fi
 launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
 if launchctl bootstrap "gui/$(id -u)" "$PLIST" 2>/dev/null; then
   echo "Automatic startup registered."
@@ -67,13 +72,8 @@ else
   echo "Automatic startup will be applied on next GUI login."
 fi
 
-if ! open -a "$DEST_APP"; then
-  echo "macOS blocked the launch. Open System Settings > Privacy & Security, use Open Anyway, then open NOVEC Hot Corners again." >&2
-  exit 2
-fi
-
 echo ""
 echo "Installed at $DEST_APP"
 echo "Enable NOVEC Hot Corners in System Settings > Privacy & Security > Accessibility."
 echo "Ensure Dictation is enabled in System Settings > Keyboard."
-echo "Corners: TL Mission Control; TR Fn+D Dictation; BL Screenshot; BR Enter."
+echo "Settings: use the NOVEC menu bar icon to configure each corner.\nDefaults: TL Mission Control; TR Fn+D Dictation; BL Screenshot; BR Enter."
