@@ -78,8 +78,10 @@ final class NOVECAppDelegate: NSObject, NSApplicationDelegate {
 if CommandLine.arguments.contains("--self-test") {
     runSelfTest()
 } else {
-    let app = NSApplication.shared
-    let delegate = NOVECAppDelegate()
-    app.delegate = delegate
-    app.run()
+    MainActor.assumeIsolated {
+        let app = NSApplication.shared
+        let delegate = NOVECAppDelegate()
+        app.delegate = delegate
+        app.run()
+    }
 }
