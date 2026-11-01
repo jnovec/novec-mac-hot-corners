@@ -219,8 +219,15 @@ final class CornerStore: ObservableObject {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: path)
         process.arguments = arguments
-        do { try process.run() }
-        catch { NSLog("NOVEC: %@ failed: %@", path, error.localizedDescription) }
+        do {
+            try process.run()
+            process.waitUntilExit()
+            if process.terminationStatus != 0 {
+                NSLog("NOVEC: %@ exited with status %d", path, process.terminationStatus)
+            }
+        } catch {
+            NSLog("NOVEC: %@ failed: %@", path, error.localizedDescription)
+        }
     }
 
     func accessibilityGranted() -> Bool { AXIsProcessTrusted() }
