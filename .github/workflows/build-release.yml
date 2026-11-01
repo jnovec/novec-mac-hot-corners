@@ -18,6 +18,10 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Validate standalone installer
+        shell: bash
+        run: bash -n scripts/install.command
+
       - name: Compile both Mac architectures and run tests
         shell: bash
         run: |
@@ -53,6 +57,7 @@ jobs:
           <key>CFBundleVersion</key><string>2</string>
           <key>CFBundleShortVersionString</key><string>0.2.0</string>
           <key>LSMinimumSystemVersion</key><string>13.0</string>
+          <key>NSAppleEventsUsageDescription</key><string>NOVEC Hot Corners opens Terminal to run only the commands you configure.</string>
           <key>LSUIElement</key><true/>
           </dict></plist>
           PLIST
