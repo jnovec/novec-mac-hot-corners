@@ -1,7 +1,12 @@
-NOVEC MAC HOT CORNERS v0.2.0 — NOVÉ GRAFICKÉ ROZHRANÍ
+NOVEC MAC HOT CORNERS v0.3.0 — VÍCEJAZYČNÉ ROZHRANÍ
 
 Nativní aplikace pro macOS s nastavením všech čtyř aktivních rohů
 a ovládáním z lišty nabídek.
+
+JAZYKY: Čeština, angličtina a němčina se automaticky volí podle
+jazykových preferencí macOS. Náhradní jazyk je angličtina.
+V Nastavení systému → Obecné → Jazyk a oblast → Aplikace je možné
+používat jiný jazyk jen pro NOVEC Hot Corners (poté aplikaci restartuj).
 
 INSTALACE:
 1. Rozbal celý stažený instalační ZIP.
