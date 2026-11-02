@@ -4,9 +4,9 @@
 
 Native macOS app with a four-corner control panel and menu bar access. Version **0.2.0** adds a full graphical editor inspired by the classic Active Corners arrangement.
 
-![NOVEC Mac Hot Corners v0.2 – grafické nastavení všech čtyř aktivních rohů](docs/images/novec-hot-corners-gui-v0.2.webp)
+![NOVEC Mac Hot Corners v0.2 – graphical settings for all four hot corners](docs/images/novec-hot-corners-gui-v0.2.webp)
 
-*Ukázka nastavení ve verzi 0.2 — pro každý roh lze vybrat jinou akci.*
+*Settings preview in v0.2 — choose a different action for each corner.*
 
 ## Four corners — your rules
 
