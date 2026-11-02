@@ -2,11 +2,15 @@
 
 **Čeština** | [English](README.en.md)
 
-Nativní aplikace pro macOS, která umožňuje nastavit samostatnou akci pro každý ze čtyř aktivních rohů obrazovky. Verze **0.2.0** přidává grafické nastavení v češtině a ovládání z lišty nabídek.
+Nativní aplikace pro macOS, která umožňuje nastavit samostatnou akci pro každý ze čtyř aktivních rohů obrazovky. Verze **0.3.0** přidává automatické přizpůsobení jazyku macOS (čeština, angličtina, němčina) a zachovává grafické ovládání všech rohů.
 
 ![NOVEC Mac Hot Corners v0.2 – grafické nastavení všech čtyř aktivních rohů](docs/images/novec-hot-corners-gui-v0.2.webp)
 
 *Ukázka nastavení ve verzi 0.2 — pro každý roh lze vybrat jinou akci.*
+
+## Jazyky aplikace
+
+Aplikace automaticky používá jazyk preferovaný v macOS: **češtinu, angličtinu nebo němčinu**. Pokud není žádný z těchto jazyků v jazykových preferencích dostupný, použije se angličtina. Jazyk lze samostatně nastavit pro NOVEC Hot Corners v **Nastavení systému → Obecné → Jazyk a oblast → Aplikace** (při změně aplikaci znovu spusť). Všechny překlady jsou součástí instalačního balíčku a fungují offline.
 
 ## Co aplikace umí
 
@@ -33,7 +37,7 @@ Grafické rozhraní obsahuje mapu rohů, přepínače povolení a nastavitelnou 
 ## Instalace
 
 1. Otevři [nejnovější vydání](https://github.com/jnovec/novec-mac-hot-corners/releases/latest).
-2. Stáhni soubor **NOVEC-Hot-Corners-v0.2.0-macOS-universal.zip**. **Nestahuj** automaticky generovaný archiv „Source code“.
+2. Stáhni soubor **NOVEC-Hot-Corners-v0.3.0-macOS-universal.zip**. **Nestahuj** automaticky generovaný archiv „Source code“.
 3. Rozbal **celý** ZIP a otevři soubor `install.command` vedle `NOVEC Hot Corners.app`.
 4. V **Nastavení systému → Soukromí a zabezpečení → Zpřístupnění** aplikaci povol. Pro funkci diktování zapni také systémové diktování v nastavení Klávesnice.
 5. Při prvním spuštění se otevře okno nastavení. Později ho otevřeš pomocí **ikony NOVEC v liště nabídek**.
@@ -41,8 +45,6 @@ Grafické rozhraní obsahuje mapu rohů, přepínače povolení a nastavitelnou 
 Instalátor uloží zálohu předchozí verze, nainstaluje aplikaci do `~/Applications`, spustí ji a zaregistruje automatické spouštění po přihlášení. Není potřeba Docker, n8n ani administrátorské oprávnění.
 
 **Zabezpečení a oprávnění:** Aplikace je podepsaná *ad-hoc*, nikoli certifikátem Apple Developer ID, a není notarizovaná. macOS proto může po kontrole balíčku vyžadovat ruční volbu **Přesto otevřít**. Po aktualizaci může být nutné znovu povolit Zpřístupnění. Vlastní příkaz v Terminálu se spouští s oprávněními přihlášeného uživatele a macOS může vyžadovat povolení Automatizace. Zadávej pouze příkazy, kterým důvěřuješ.
-
-> Poznámka: Již publikovaný instalační ZIP verze 0.2.0 obsahuje původní anglický soubor `README-FIRST.txt`. Česká verze v repozitáři bude přibalena při následujícím vydání. Samotná aplikace se nemění.
 
 ## Sestavení ze zdrojových kódů
 

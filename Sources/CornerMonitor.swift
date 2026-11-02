@@ -36,7 +36,7 @@ final class CornerMonitor {
 
     func start() {
         if !AXIsProcessTrusted() { store.requestAccessibility() }
-        Diagnostics.write("v0.2 monitor started; accessibility=\(AXIsProcessTrusted())")
+        Diagnostics.write("v0.3 monitor started; accessibility=\(AXIsProcessTrusted())")
         timer = Timer.scheduledTimer(withTimeInterval: 0.10, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.tick()
@@ -76,58 +76,58 @@ final class CornerMonitor {
             return // Native macOS Dock handles these.
         case .screenshot:
             CornerStore.execute("/usr/bin/open", ["-a", "Screenshot"])
-            store.status = "Otevřeno: Screenshot"
+            store.status = L10n.text("status.screenshotOpened")
         case .dictation:
             sendKey(2, flags: .maskSecondaryFn, name: "Fn+D")
         case .enter:
             sendKey(36, flags: [], name: "Enter")
         case .shortcut:
             guard let shortcut = KeyboardShortcut.parse(rule.shortcut) else {
-                store.status = "Neplatná klávesová zkratka"
+                store.status = L10n.text("status.invalidShortcut")
                 Diagnostics.write("invalid-shortcut")
                 return
             }
-            sendKey(shortcut.key, flags: shortcut.flags, name: "Klávesová zkratka")
+            sendKey(shortcut.key, flags: shortcut.flags, name: L10n.text("status.shortcutName"))
         case .terminalCommand:
             launchTerminalCommand(rule.command)
         case .launchApplication:
             let path = rule.applicationPath
             guard !path.isEmpty, FileManager.default.fileExists(atPath: path) else {
-                store.status = "Aplikace nebyla nalezena"
+                store.status = L10n.text("status.applicationNotFound")
                 return
             }
             if NSWorkspace.shared.open(URL(fileURLWithPath: path)) {
-                store.status = "Aplikace spuštěna"
+                store.status = L10n.text("status.applicationStarted")
             } else {
-                store.status = "Spuštění aplikace selhalo"
+                store.status = L10n.text("status.applicationFailed")
             }
         }
     }
 
     private func sendKey(_ key: CGKeyCode, flags: CGEventFlags, name: String) {
         guard AXIsProcessTrusted() else {
-            store.status = "Povol přístupnost pro NOVEC Hot Corners"
+            store.status = L10n.text("status.accessibilityNeeded")
             Diagnostics.write("keyboard-event-blocked accessibility=false")
             store.requestAccessibility()
             return
         }
         guard let down = CGEvent(keyboardEventSource: nil, virtualKey: key, keyDown: true),
               let up = CGEvent(keyboardEventSource: nil, virtualKey: key, keyDown: false) else {
-            store.status = "Nelze vytvořit klávesovou událost"
+            store.status = L10n.text("status.keyEventFailed")
             return
         }
         down.flags = flags
         up.flags = flags
         down.post(tap: .cghidEventTap)
         up.post(tap: .cghidEventTap)
-        store.status = "Odesláno: \(name)"
+        store.status = L10n.formatted("status.keyPosted", name)
         Diagnostics.write("key-posted \(name)")
     }
 
     private func launchTerminalCommand(_ command: String) {
         let trimmed = command.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            store.status = "Zadej příkaz pro Terminál"
+            store.status = L10n.text("status.terminalMissingCommand")
             return
         }
         // Run ONLY the locally configured command. AppleScript strings are escaped
@@ -139,16 +139,16 @@ final class CornerMonitor {
             .replacingOccurrences(of: "\n", with: " ")
         let source = "tell application \"Terminal\"\nactivate\ndo script \"\(escaped)\"\nend tell"
         guard let script = NSAppleScript(source: source) else {
-            store.status = "Chyba příkazu AppleScript"
+            store.status = L10n.text("status.terminalScriptError")
             return
         }
         var error: NSDictionary?
         _ = script.executeAndReturnError(&error)
         if let error = error {
-            store.status = "Terminál: zkontroluj oprávnění Automatizace"
+            store.status = L10n.text("status.terminalPermissionError")
             Diagnostics.write("terminal-command-failed \(error.count) error fields")
         } else {
-            store.status = "Příkaz otevřen v Terminálu"
+            store.status = L10n.text("status.terminalStarted")
             Diagnostics.write("terminal-command-started")
         }
     }

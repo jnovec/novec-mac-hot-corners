@@ -10,10 +10,10 @@ enum CornerID: String, CaseIterable, Codable, Identifiable {
 
     var title: String {
         switch self {
-        case .topLeft: return "Levý horní"
-        case .topRight: return "Pravý horní"
-        case .bottomLeft: return "Levý dolní"
-        case .bottomRight: return "Pravý dolní"
+        case .topLeft: return L10n.text("corner.topLeft")
+        case .topRight: return L10n.text("corner.topRight")
+        case .bottomLeft: return L10n.text("corner.bottomLeft")
+        case .bottomRight: return L10n.text("corner.bottomRight")
         }
     }
 
@@ -46,16 +46,16 @@ enum CornerAction: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var label: String {
         switch self {
-        case .none: return "Žádná akce"
-        case .missionControl: return "Mission Control"
-        case .appWindows: return "Zobrazit okna aplikace"
-        case .showDesktop: return "Zobrazit plochu"
-        case .screenshot: return "Screenshot"
-        case .dictation: return "Spustit diktování"
-        case .enter: return "Stisknout Enter"
-        case .shortcut: return "Klávesová zkratka"
-        case .terminalCommand: return "Příkaz v Terminálu"
-        case .launchApplication: return "Spustit aplikaci"
+        case .none: return L10n.text("action.none")
+        case .missionControl: return L10n.text("action.missionControl")
+        case .appWindows: return L10n.text("action.appWindows")
+        case .showDesktop: return L10n.text("action.showDesktop")
+        case .screenshot: return L10n.text("action.screenshot")
+        case .dictation: return L10n.text("action.dictation")
+        case .enter: return L10n.text("action.enter")
+        case .shortcut: return L10n.text("action.shortcut")
+        case .terminalCommand: return L10n.text("action.terminalCommand")
+        case .launchApplication: return L10n.text("action.launchApplication")
         }
     }
 
@@ -168,7 +168,7 @@ final class CornerStore: ObservableObject {
             syncDock()
         }
     }
-    @Published var status = "Připraveno"
+    @Published var status = L10n.text("status.ready")
     private var appliedDock: [CornerID: Int] = [:]
 
     init() {
@@ -187,7 +187,7 @@ final class CornerStore: ObservableObject {
     func save() {
         if let data = try? JSONEncoder().encode(config) {
             UserDefaults.standard.set(data, forKey: Self.configKey)
-            status = "Nastavení uloženo"
+            status = L10n.text("status.saved")
         }
     }
 
@@ -251,5 +251,21 @@ func runSelfTest() {
     precondition(KeyboardShortcut.parse("fn+d")?.key == 2)
     precondition(KeyboardShortcut.parse("cmd+shift+5")?.key == 23)
     precondition(KeyboardShortcut.parse("bad+key") == nil)
-    print("HOT_CORNERS_V02_SELF_TEST_OK")
+    // Verify that all bundled locales contain required translations.
+    let languages = ["cs", "en", "de"]
+    if let root = Bundle.main.resourceURL,
+       FileManager.default.fileExists(atPath: root.appendingPathComponent("en.lproj/Localizable.strings").path) {
+        let keys = ["corner.topLeft", "corner.topRight", "ui.save", "ui.subtitle", "menu.quit", "status.ready"]
+        for language in languages {
+            let url = root.appendingPathComponent("\(language).lproj/Localizable.strings")
+            guard let data = try? Data(contentsOf: url),
+                  let strings = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: String] else {
+                fatalError("Missing or invalid translations for \(language)")
+            }
+            for key in keys {
+                precondition(strings[key]?.isEmpty == false, "Missing \(language) translation: \(key)")
+            }
+        }
+    }
+    print("HOT_CORNERS_V03_SELF_TEST_OK")
 }

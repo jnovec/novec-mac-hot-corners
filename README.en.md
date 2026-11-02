@@ -2,15 +2,19 @@
 
 # NOVEC Mac Hot Corners
 
-Native macOS app with a four-corner control panel and menu bar access. Version **0.2.0** adds a full graphical editor inspired by the classic Active Corners arrangement.
+Native macOS app with a four-corner control panel and menu bar access. Version **0.3.0** adds native language selection based on macOS preferences (Czech, English, German) and keeps the four-corner graphical editor.
 
 ![NOVEC Mac Hot Corners v0.2 – graphical settings for all four hot corners](docs/images/novec-hot-corners-gui-v0.2.webp)
 
 *Settings preview in v0.2 — choose a different action for each corner.*
 
+## App languages
+
+The application follows the preferred language from macOS: **Czech, English, or German**, with English as the fallback. Users can override the language per app in **System Settings → General → Language & Region → Applications**, then restart the app. Translations are bundled in the app and work offline.
+
 ## Four corners — your rules
 
-Choose an action separately for each screen corner in **NOVEC Hot Corners → Nastavení aktivních rohů** in the menu bar:
+Choose an action separately for each screen corner in **NOVEC Hot Corners → Hot Corner Settings…** in the menu bar:
 
 - Mission Control, show application windows, or show desktop (native macOS actions)
 - Screenshot toolbar, system-wide Dictation using **Fn + D**, or Enter
@@ -33,7 +37,7 @@ The default mapping remains:
 ## Install
 
 1. Open [Releases](https://github.com/jnovec/novec-mac-hot-corners/releases/latest).
-2. Download **NOVEC-Hot-Corners-v0.2.0-macOS-universal.zip** — **not** GitHub's automatically generated source ZIP.
+2. Download **NOVEC-Hot-Corners-v0.3.0-macOS-universal.zip** — **not** GitHub's automatically generated source ZIP.
 3. Extract the whole ZIP, then open `install.command` next to `NOVEC Hot Corners.app`.
 4. Allow the app in System Settings → Privacy & Security → Accessibility, and enable Dictation in Keyboard settings.
 5. The GUI opens on first launch. Afterward, open settings anytime from the **NOVEC icon in the macOS menu bar**.

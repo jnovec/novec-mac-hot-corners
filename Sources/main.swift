@@ -32,7 +32,7 @@ final class NOVECAppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
         let settings = NSMenuItem(
-            title: "Nastavení aktivních rohů…",
+            title: L10n.text("menu.settings"),
             action: #selector(showSettings(_:)),
             keyEquivalent: ","
         )
@@ -41,7 +41,7 @@ final class NOVECAppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
 
         let quit = NSMenuItem(
-            title: "Ukončit NOVEC Hot Corners",
+            title: L10n.text("menu.quit"),
             action: #selector(quitApplication(_:)),
             keyEquivalent: "q"
         )
@@ -59,7 +59,7 @@ final class NOVECAppDelegate: NSObject, NSApplicationDelegate {
                 backing: .buffered,
                 defer: false
             )
-            window.title = "NOVEC Hot Corners — Nastavení"
+            window.title = L10n.text("window.title")
             window.contentView = NSHostingView(rootView: SettingsView(store: store))
             window.minSize = NSSize(width: 1060, height: 655)
             window.center()
