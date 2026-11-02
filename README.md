@@ -1,64 +1,68 @@
 # NOVEC Mac Hot Corners
 
-Native macOS app with a four-corner control panel and menu bar access. Version **0.2.0** adds a full graphical editor inspired by the classic Active Corners arrangement.
+**Čeština** | [English](README.en.md)
+
+Nativní aplikace pro macOS, která umožňuje nastavit samostatnou akci pro každý ze čtyř aktivních rohů obrazovky. Verze **0.2.0** přidává grafické nastavení v češtině a ovládání z lišty nabídek.
 
 ![NOVEC Mac Hot Corners v0.2 – grafické nastavení všech čtyř aktivních rohů](docs/images/novec-hot-corners-gui-v0.2.webp)
 
 *Ukázka nastavení ve verzi 0.2 — pro každý roh lze vybrat jinou akci.*
 
-## Four corners — your rules
+## Co aplikace umí
 
-Choose an action separately for each screen corner in **NOVEC Hot Corners → Nastavení aktivních rohů** in the menu bar:
+V nabídce **NOVEC Hot Corners → Nastavení aktivních rohů…** lze pro každý roh nezávisle zvolit:
 
-- Mission Control, show application windows, or show desktop (native macOS actions)
-- Screenshot toolbar, system-wide Dictation using **Fn + D**, or Enter
-- Any keyboard shortcut such as `cmd+shift+5`, `ctrl+up`, or `fn+d`
-- A command executed visibly in macOS Terminal
-- An installed application selected with the file chooser
-- Disable a corner individually
+- Mission Control, zobrazení oken aplikace nebo plochy (nativní funkce macOS).
+- Spuštění nástroje Screenshot, systémového diktování pomocí **Fn + D** nebo stisknutí Enter.
+- Vlastní klávesovou zkratku, například `cmd+shift+5`, `ctrl+up` nebo `fn+d`.
+- Spuštění vlastního příkazu v Terminálu.
+- Otevření nainstalované aplikace vybrané v dialogu.
+- Vypnutí akce pro konkrétní roh.
 
-The settings GUI includes a visual screen diagram, enable switches and adjustable hover delay. Actions are saved locally and apply immediately. The physical MacBook **F5 microphone key is not changed**.
+Grafické rozhraní obsahuje mapu rohů, přepínače povolení a nastavitelnou prodlevu aktivace. Nastavení se ukládá lokálně, uplatní se ihned a zůstane zachováno po restartu. **Fyzická klávesa mikrofonu F5 na MacBooku se nemění.**
 
-The default mapping remains:
+### Výchozí nastavení
 
-| Corner | Default |
+| Roh obrazovky | Akce |
 |---|---|
-| Top-left | Mission Control |
-| Top-right | macOS Dictation (Fn + D) |
-| Bottom-left | Screenshot |
-| Bottom-right | Return / Enter |
+| Levý horní | Mission Control |
+| Pravý horní | Diktování macOS (Fn + D) |
+| Levý dolní | Screenshot |
+| Pravý dolní | Enter |
 
-## Install
+## Instalace
 
-1. Open [Releases](https://github.com/jnovec/novec-mac-hot-corners/releases/latest).
-2. Download **NOVEC-Hot-Corners-v0.2.0-macOS-universal.zip** — **not** GitHub's automatically generated source ZIP.
-3. Extract the whole ZIP, then open `install.command` next to `NOVEC Hot Corners.app`.
-4. Allow the app in System Settings → Privacy & Security → Accessibility, and enable Dictation in Keyboard settings.
-5. The GUI opens on first launch. Afterward, open settings anytime from the **NOVEC icon in the macOS menu bar**.
+1. Otevři [nejnovější vydání](https://github.com/jnovec/novec-mac-hot-corners/releases/latest).
+2. Stáhni soubor **NOVEC-Hot-Corners-v0.2.0-macOS-universal.zip**. **Nestahuj** automaticky generovaný archiv „Source code“.
+3. Rozbal **celý** ZIP a otevři soubor `install.command` vedle `NOVEC Hot Corners.app`.
+4. V **Nastavení systému → Soukromí a zabezpečení → Zpřístupnění** aplikaci povol. Pro funkci diktování zapni také systémové diktování v nastavení Klávesnice.
+5. Při prvním spuštění se otevře okno nastavení. Později ho otevřeš pomocí **ikony NOVEC v liště nabídek**.
 
-The installer backs up any previous version, installs into `~/Applications`, starts the app and registers quiet autostart on GUI login. No n8n server, Docker or administrator access is required.
+Instalátor uloží zálohu předchozí verze, nainstaluje aplikaci do `~/Applications`, spustí ji a zaregistruje automatické spouštění po přihlášení. Není potřeba Docker, n8n ani administrátorské oprávnění.
 
-**Security and permissions:** The public CI release is ad-hoc signed, not signed with an Apple Developer ID and not notarized. On download macOS may require **Open Anyway** after you review and trust the package. Updates may require re-approving Accessibility. The optional Terminal action executes **only the command you explicitly enter**, with your current user permissions, and macOS may request permission to automate Terminal. Avoid untrusted commands.
+**Zabezpečení a oprávnění:** Aplikace je podepsaná *ad-hoc*, nikoli certifikátem Apple Developer ID, a není notarizovaná. macOS proto může po kontrole balíčku vyžadovat ruční volbu **Přesto otevřít**. Po aktualizaci může být nutné znovu povolit Zpřístupnění. Vlastní příkaz v Terminálu se spouští s oprávněními přihlášeného uživatele a macOS může vyžadovat povolení Automatizace. Zadávej pouze příkazy, kterým důvěřuješ.
 
-## Building from source
+> Poznámka: Již publikovaný instalační ZIP verze 0.2.0 obsahuje původní anglický soubor `README-FIRST.txt`. Česká verze v repozitáři bude přibalena při následujícím vydání. Samotná aplikace se nemění.
+
+## Sestavení ze zdrojových kódů
 
 ```sh
 xcrun swiftc -O Sources/*.swift -o novec-hot-corners
 ./novec-hot-corners --self-test
 ```
 
-The [GitHub Actions workflow](https://github.com/jnovec/novec-mac-hot-corners/actions/workflows/build-release.yml) builds and tests for Apple Silicon (`arm64`) and Intel (`x86_64`) on GitHub's macOS runners, combines a universal binary, creates a local ad-hoc app signature, and attaches a ZIP and SHA-256 checksum to each `v*` GitHub Release.
+[GitHub Actions](https://github.com/jnovec/novec-mac-hot-corners/actions/workflows/build-release.yml) kompilují a testují verze pro Apple Silicon (`arm64`) i Intel (`x86_64`), vytvoří univerzální binární soubor, přidají lokální podpis a ke každému vydání s tagem `v*` publikují ZIP a kontrolní součet SHA-256.
 
-## Implementation
+## Technické informace
 
-- Native SwiftUI settings UI plus menu bar status item (AppKit)
-- Preferences stored locally using UserDefaults
-- Custom corner polling: 350 ms default hover dwell, one activation per visit, 2-second cooldown
-- Multimonitor detection via `NSScreen`
-- Local keyboard events using macOS Accessibility / CGEvent APIs
-- Native desktop/workspace actions controlled through macOS Dock hot corners
-- Log: `~/Library/Logs/NOVEC-HotCorners.log`
+- Nativní nastavení ve SwiftUI a ikona v liště nabídek přes AppKit.
+- Ukládání nastavení pomocí `UserDefaults`.
+- Výchozí prodleva aktivace 350 ms, jedno spuštění při najetí do rohu a dvousekundová ochrana proti opakování.
+- Podpora více monitorů pomocí `NSScreen`.
+- Klávesové události prostřednictvím macOS Accessibility a `CGEvent`.
+- Systémové funkce plochy a oken spravuje macOS Dock.
+- Diagnostický log: `~/Library/Logs/NOVEC-HotCorners.log`.
 
-CI verifies compilation, architecture, signature and corner mapping but cannot simulate macOS GUI approval or external application behavior. Practical GUI and Terminal/Automation permissions should be validated on the target Mac.
+Automatické testy ověřují sestavení, architektury, podpis a mapování rohů. Nedokážou však plně simulovat interakci s grafickým rozhraním ani schvalování oprávnění macOS. Tyto funkce je nutné prakticky ověřit na cílovém Macu.
 
-This repository contains only the standalone NOVEC Mac Hot Corners app.
+Tento repozitář obsahuje pouze samostatnou aplikaci NOVEC Mac Hot Corners.
