@@ -45,7 +45,7 @@ struct CornerSettingsCard: View {
                     .frame(width: 8, height: 8)
             }
 
-            Picker("Akce", selection: action) {
+            Picker(L10n.text("ui.action"), selection: action) {
                 ForEach(CornerAction.allCases) { choice in
                     Text(choice.label).tag(choice)
                 }
@@ -53,39 +53,39 @@ struct CornerSettingsCard: View {
             .labelsHidden()
             .frame(maxWidth: .infinity)
 
-            Toggle("Najetí povoleno", isOn: enabled)
+            Toggle(L10n.text("ui.enabled"), isOn: enabled)
                 .toggleStyle(.checkbox)
 
             if rule.action == .shortcut {
-                TextField("Např. cmd+shift+5", text: shortcut)
+                TextField(L10n.text("ui.shortcutPlaceholder"), text: shortcut)
                     .textFieldStyle(.roundedBorder)
                 if KeyboardShortcut.parse(rule.shortcut) == nil {
-                    Label("Neplatná zkratka", systemImage: "exclamationmark.triangle")
+                    Label(L10n.text("ui.invalidShortcut"), systemImage: "exclamationmark.triangle")
                         .font(.caption)
                         .foregroundStyle(.orange)
                 } else {
-                    Text("Příklady: cmd+shift+5, ctrl+up, fn+d")
+                    Text(L10n.text("ui.shortcutExamples"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             } else if rule.action == .terminalCommand {
-                TextField("Příkaz, např. say Ahoj", text: command)
+                TextField(L10n.text("ui.commandPlaceholder"), text: command)
                     .textFieldStyle(.roundedBorder)
-                Text("Spustí se v Terminálu pod tvým účtem. Používej jen důvěryhodné příkazy.")
+                Text(L10n.text("ui.commandWarning"))
                     .font(.caption)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
             } else if rule.action == .launchApplication {
                 HStack(spacing: 6) {
                     Text(rule.applicationPath.isEmpty
-                         ? "Aplikace nevybrána"
+                         ? L10n.text("ui.applicationNotSelected")
                          : URL(fileURLWithPath: rule.applicationPath).lastPathComponent)
                         .lineLimit(1)
                         .foregroundStyle(rule.applicationPath.isEmpty ? .secondary : .primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Button("Vybrat…") {
+                    Button(L10n.text("ui.choose")) {
                         let panel = NSOpenPanel()
-                        panel.title = "Vyber aplikaci"
+                        panel.title = L10n.text("ui.chooseApp")
                         panel.allowedContentTypes = [.application]
                         panel.allowsOtherFileTypes = false
                         panel.canChooseDirectories = false
@@ -97,11 +97,11 @@ struct CornerSettingsCard: View {
                     .controlSize(.small)
                 }
             } else if rule.action == .dictation {
-                Text("Systémové diktování · Fn + D")
+                Text(L10n.text("ui.dictationInfo"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else if rule.action.dockValue != nil {
-                Text("Tuto akci provádí přímo macOS.")
+                Text(L10n.text("ui.nativeActionInfo"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -136,7 +136,7 @@ struct ScreenIllustration: View {
 
     var body: some View {
         VStack(spacing: 14) {
-            Text("MAPA ROHŮ")
+            Text(L10n.text("ui.cornerMap"))
                 .font(.caption.weight(.semibold))
                 .tracking(2)
                 .foregroundStyle(.secondary)
@@ -185,7 +185,7 @@ struct ScreenIllustration: View {
             }
             .aspectRatio(1.18, contentMode: .fit)
 
-            Text("Každý roh může spouštět jinou akci.")
+            Text(L10n.text("ui.cornerHint"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -224,11 +224,11 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("NOVEC Hot Corners")
                         .font(.system(size: 26, weight: .bold))
-                    Text("Přizpůsob si všechny čtyři aktivní rohy.")
+                    Text(L10n.text("ui.subtitle"))
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text("v0.2")
+                Text("v0.3")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 10)
@@ -256,7 +256,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Divider()
                 HStack {
-                    Text("Zpoždění aktivace")
+                    Text(L10n.text("ui.activationDelay"))
                         .font(.subheadline.weight(.medium))
                     Slider(value: delay, in: 0.2...1.5, step: 0.05)
                         .frame(width: 180)
@@ -264,11 +264,11 @@ struct SettingsView: View {
                         .font(.subheadline.monospacedDigit())
                     Spacer()
                     if store.accessibilityGranted() {
-                        Label("Přístupnost povolena", systemImage: "checkmark.shield")
+                        Label(L10n.text("ui.accessibilityGranted"), systemImage: "checkmark.shield")
                             .foregroundStyle(.green)
                             .font(.caption)
                     } else {
-                        Button("Povolit přístupnost") { store.requestAccessibility() }
+                        Button(L10n.text("ui.accessibilityRequest")) { store.requestAccessibility() }
                     }
                 }
                 HStack {
@@ -277,10 +277,10 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                     Spacer()
-                    Button("Obnovit výchozí") {
+                    Button(L10n.text("ui.reset")) {
                         store.resetDefaults()
                     }
-                    Button("Uložit nastavení") {
+                    Button(L10n.text("ui.save")) {
                         store.save()
                     }
                     .keyboardShortcut("s", modifiers: .command)
