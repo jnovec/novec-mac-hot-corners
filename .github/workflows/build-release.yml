@@ -20,7 +20,11 @@ jobs:
 
       - name: Validate standalone installer
         shell: bash
-        run: bash -n scripts/install.command
+        run: |
+          bash -n scripts/install.command
+          for lang in cs en de; do
+            plutil -lint "Resources/$lang.lproj/Localizable.strings"
+          done
 
       - name: Compile both Mac architectures and run tests
         shell: bash
@@ -44,6 +48,8 @@ jobs:
           APP="build/NOVEC Hot Corners.app"
           mkdir -p "$APP/Contents/MacOS"
           cp build/novec-hot-corners "$APP/Contents/MacOS/novec-hot-corners"
+          mkdir -p "$APP/Contents/Resources"
+          cp -R Resources/*.lproj "$APP/Contents/Resources/"
           chmod +x "$APP/Contents/MacOS/novec-hot-corners"
           cat > "$APP/Contents/Info.plist" <<'PLIST'
           <?xml version="1.0" encoding="UTF-8"?>
@@ -54,8 +60,10 @@ jobs:
           <key>CFBundleDisplayName</key><string>NOVEC Hot Corners</string>
           <key>CFBundleExecutable</key><string>novec-hot-corners</string>
           <key>CFBundlePackageType</key><string>APPL</string>
-          <key>CFBundleVersion</key><string>2</string>
-          <key>CFBundleShortVersionString</key><string>0.2.0</string>
+          <key>CFBundleVersion</key><string>3</string>
+          <key>CFBundleShortVersionString</key><string>0.3.0</string>
+          <key>CFBundleDevelopmentRegion</key><string>en</string>
+          <key>CFBundleLocalizations</key><array><string>cs</string><string>en</string><string>de</string></array>
           <key>LSMinimumSystemVersion</key><string>13.0</string>
           <key>NSAppleEventsUsageDescription</key><string>NOVEC Hot Corners opens Terminal to run only the commands you configure.</string>
           <key>LSUIElement</key><true/>
